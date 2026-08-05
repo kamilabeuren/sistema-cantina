@@ -1,16 +1,71 @@
-# React + Vite
+# Sistema da Cantina do Campus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto Integrador desenvolvido para gerenciamento de pedidos da cantina do campus, permitindo que clientes realizem pedidos online e acompanhem seu status, enquanto administradores gerenciam produtos, categorias e pedidos.
 
-Currently, two official plugins are available:
+## Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Área do Cliente
 
-## React Compiler
+* Home
+* Cardápio de produtos
+* Carrinho de compras
+* Pagamento
+* Acompanhamento do pedido
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Área Administrativa
 
-## Expanding the ESLint configuration
+* Dashboard
+* Gerenciamento de produtos
+* Gerenciamento de categorias
+* Gerenciamento de pedidos
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Estrutura de Páginas
+
+### Cliente
+
+* Home
+* Cardápio
+* Carrinho
+* Pagamento
+* Acompanhamento do Pedido
+
+### Administrador
+
+* Dashboard
+* Produtos
+* Categorias
+* Pedidos
+
+## Tecnologias Utilizadas
+
+* React
+* Vite
+* React Router
+* Bootstrap
+* LocalStorage
+
+## Instalação
+
+Clone o repositório:
+
+```bash
+git clone URL_DO_REPOSITORIO
+```
+
+Acesse a pasta do projeto:
+
+```bash
+cd sistema-cantina
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Execute o projeto:
+
+```bash
+npm run dev
+```
