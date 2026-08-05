@@ -49,7 +49,7 @@ Projeto Integrador desenvolvido para gerenciamento de pedidos da cantina do camp
 Clone o repositório:
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/kamilabeuren/sistema-cantina
 ```
 
 Acesse a pasta do projeto:
