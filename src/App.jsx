@@ -1,12 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import Payment from "./pages/Payment";
-import OrderTracking from "./pages/OrderTracking";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <Routes>
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/order" element={<OrderTracking />} />
+      <Route path="/" element={<Home />} />
     </Routes>
   );
 }
