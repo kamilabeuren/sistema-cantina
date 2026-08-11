@@ -1,11 +1,17 @@
 import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-    </Routes>
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col font-sans antialiased">
+      <Navbar cartCount={3} />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 
