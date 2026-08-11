@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
-  Utensils,
   ShoppingBag,
   Home as HomeIcon,
   BookOpen,
@@ -31,23 +30,23 @@ export default function Navbar({ cartCount = 2, user = null }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* Logo & Marca */}
+          {/* Logo & Marca Oficial IFRS */}
           <Link
             to="/"
             className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl p-1 transition-all"
           >
-            {/* Ícone estilizado com matriz de blocos remetendo à marca do IF */}
-            <div className="relative w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center border border-primary-100 group-hover:scale-105 transition-transform">
-              <div className="grid grid-cols-2 gap-0.5 w-5 h-5">
-                <span className="bg-accent-500 rounded-[2px] w-2 h-2"></span>
-                <span className="bg-primary-500 rounded-[2px] w-2 h-2"></span>
-                <span className="bg-primary-500 rounded-[2px] w-2 h-2"></span>
-                <span className="bg-primary-500 rounded-[2px] w-2 h-2"></span>
-              </div>
+            {/* Logo Oficial IFRS */}
+            <div className="h-10 sm:h-12 flex items-center group-hover:scale-105 transition-transform">
+              <img
+                src="/ifrs-logo.svg"
+                alt="Instituto Federal Rio Grande do Sul - Logo"
+                className="h-full w-auto object-contain"
+              />
             </div>
 
-            <div className="flex flex-col">
-              <span className="font-bold text-lg leading-tight text-gray-900 group-hover:text-primary-600 transition-colors">
+            {/* Nome da Cantina em Destaque */}
+            <div className="flex flex-col border-l border-gray-200 pl-3">
+              <span className="font-bold text-base sm:text-lg leading-tight text-gray-900 group-hover:text-primary-600 transition-colors">
                 Cantina <span className="text-primary-600">IFRS</span>
               </span>
               <span className="text-[10px] tracking-wider font-semibold uppercase text-gray-400">
