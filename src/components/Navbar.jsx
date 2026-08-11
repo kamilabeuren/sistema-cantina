@@ -10,12 +10,6 @@ import {
   X,
 } from "lucide-react";
 
-/**
- * Navbar Reutilizável - Cantina IFRS
- * 
- * @param {number} cartCount - Número de itens no carrinho (opcional, padrão: 0)
- * @param {object} user - Dados do usuário logado (opcional)
- */
 export default function Navbar({ cartCount = 2, user = null }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -30,12 +24,10 @@ export default function Navbar({ cartCount = 2, user = null }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* Logo & Marca Oficial IFRS */}
           <Link
             to="/"
             className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl p-1 transition-all"
           >
-            {/* Logo Oficial IFRS */}
             <div className="h-10 sm:h-12 flex items-center group-hover:scale-105 transition-transform">
               <img
                 src="/ifrs-logo.svg"
@@ -44,7 +36,6 @@ export default function Navbar({ cartCount = 2, user = null }) {
               />
             </div>
 
-            {/* Nome da Cantina em Destaque */}
             <div className="flex flex-col border-l border-gray-200 pl-3">
               <span className="font-bold text-base sm:text-lg leading-tight text-gray-900 group-hover:text-primary-600 transition-colors">
                 Cantina <span className="text-primary-600">IFRS</span>
@@ -55,7 +46,6 @@ export default function Navbar({ cartCount = 2, user = null }) {
             </div>
           </Link>
 
-          {/* Links de Navegação - Desktop */}
           <nav className="hidden md:flex items-center gap-1 lg:gap-2 bg-gray-50/80 p-1.5 rounded-full border border-gray-100">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -78,10 +68,8 @@ export default function Navbar({ cartCount = 2, user = null }) {
             })}
           </nav>
 
-          {/* Ações da Direita: Carrinho & Login */}
           <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* Botão de Carrinho com Badge */}
             <Link
               to="/carrinho"
               aria-label="Carrinho de compras"
@@ -97,10 +85,8 @@ export default function Navbar({ cartCount = 2, user = null }) {
               )}
             </Link>
 
-            {/* Divisor Visual */}
             <div className="hidden sm:block h-6 w-px bg-gray-200" />
 
-            {/* Botão de Login / Perfil */}
             {user ? (
               <Link
                 to="/perfil"
@@ -123,7 +109,6 @@ export default function Navbar({ cartCount = 2, user = null }) {
               </Link>
             )}
 
-            {/* Toggle Menu Mobile */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
@@ -135,7 +120,6 @@ export default function Navbar({ cartCount = 2, user = null }) {
         </div>
       </div>
 
-      {/* Menu Mobile Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-md px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-2 duration-200">
           {navItems.map((item) => {
