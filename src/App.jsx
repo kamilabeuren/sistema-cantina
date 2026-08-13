@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Produtos from "./pages/Produtos"; // <-- IMPORT ADICIONADO AQUI
+import Produtos from "./pages/Produtos";
+import Pagamento from "./pages/pagamento.jsx";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/admin/produtos" element={<Produtos />} /> {/* <-- ROTA ADICIONADA AQUI */}
+          <Route path="/admin/produtos" element={<Produtos />} />
+          <Route path="/pagamento" element={<Pagamento />} />
         </Routes>
       </main>
       <Footer />
