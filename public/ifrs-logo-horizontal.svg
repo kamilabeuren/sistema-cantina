@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" fill="none">
+  <!-- Emblem Grid -->
+  <g transform="translate(5, 5) scale(0.36)">
+    <!-- Row 1 -->
+    <circle cx="20" cy="20" r="20" fill="#CB2C31"/>
+    <rect x="50" y="0" width="40" height="40" rx="4" fill="#2F9E41"/>
+    <rect x="100" y="0" width="40" height="40" rx="4" fill="#2F9E41"/>
+    
+    <!-- Row 2 -->
+    <rect x="0" y="50" width="40" height="40" rx="4" fill="#2F9E41"/>
+    <rect x="50" y="50" width="40" height="40" rx="4" fill="#2F9E41"/>
+    
+    <!-- Row 3 -->
+    <rect x="0" y="100" width="40" height="40" rx="4" fill="#2F9E41"/>
+    <rect x="50" y="100" width="40" height="40" rx="4" fill="#2F9E41"/>
+    <rect x="100" y="100" width="40" height="40" rx="4" fill="#2F9E41"/>
+    
+    <!-- Row 4 -->
+    <rect x="0" y="150" width="40" height="40" rx="4" fill="#2F9E41"/>
+    <rect x="50" y="150" width="40" height="40" rx="4" fill="#2F9E41"/>
+  </g>
+
+  <!-- Typography -->
+  <g transform="translate(68, 12)">
+    <text x="0" y="18" fill="#1C1B1B" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="900" font-size="16" letter-spacing="0.5">INSTITUTO FEDERAL</text>
+    <text x="0" y="38" fill="#1C1B1B" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="900" font-size="16" letter-spacing="0.5">DE EDUCAÇÃO, CIÊNCIA E TECNOLOGIA</text>
+    <text x="0" y="54" fill="#2B2B2B" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="400" font-size="14">Rio Grande do Sul</text>
+  </g>
+</svg>
