@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
 import Pagamento from "./pages/pagamento.jsx";
+import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin/produtos" element={<Produtos />} />
           <Route path="/pagamento" element={<Pagamento />} />
+          <Route path="/pedido/:id" element={<AcompanhamentoPedido />} />
         </Routes>
       </main>
       <Footer />
