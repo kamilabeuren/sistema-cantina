@@ -3,7 +3,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
-import Pagamento from "./pages/pagamento.jsx";
+import Pagamento from "./pages/Pagamento.jsx";
+import Cardapio from "./pages/Cardapio.jsx";
 import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/admin/produtos" element={<Produtos />} />
           <Route path="/pagamento" element={<Pagamento />} />
           <Route path="/pedido/:id" element={<AcompanhamentoPedido />} />
+          <Route path="/cardapio" element={<Cardapio />} />
         </Routes>
       </main>
       <Footer />
