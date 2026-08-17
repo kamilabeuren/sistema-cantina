@@ -4,18 +4,18 @@ import "./Cardapio.css";
 const produtos = [
   {
     id: 1,
-    nome: "pão com hambúrguer",
-    descricao: "Pão, hambúrguer",
-    preco: 12.0,
+   nome: "X-Burger",
+    descricao: "Pão, hambúrguer, queijo e molho especial",
+    preco: 22.9,
     categoria: "Hambúrgueres",
     imagem: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
   },
   {
     id: 2,
-    nome: "Pão,presunto,queijo",
-    descricao: "Pão, presunto, queijo",
-    preco: 10.0,
-    categoria: "Sanduíches",
+     nome: "X-Salada",
+    descricao: "Hambúrguer, queijo, alface, tomate e molho",
+    preco: 25.9,
+    categoria: "Hambúrgueres",
     imagem: "https://images.unsplash.com/photo-1550547660-d9450f859349",
   },
   {
