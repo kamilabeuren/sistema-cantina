@@ -20,10 +20,10 @@ const produtos = [
   },
   {
     id: 3,
-    nome: "pão de queijo",
-    descricao: "pão de queijo",
+    nome: "Batata Frita",
+    descricao: "Batata Frita",
     preco: 10.0,
-    categoria: "Salgados",
+    categoria: "Porção",
     imagem: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877",
   },
   {
