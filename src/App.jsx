@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
+import Carrinho from "./pages/Carrinho.jsx";
 import Pagamento from "./pages/pagamento.jsx";
 import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
 
