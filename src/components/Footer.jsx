@@ -18,6 +18,12 @@ export default function Footer() {
             </p>
           </div>
 
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-gray-600">
+            <a href="/" className="hover:text-primary-600 transition-colors">Início</a>
+            <a href="/como-funciona" className="hover:text-primary-600 transition-colors">Como Funciona</a>
+            <a href="/cardapio" className="hover:text-primary-600 transition-colors">Cardápio</a>
+          </div>
+
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 sm:gap-6 text-xs text-gray-500">
             <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
               <Clock className="w-3.5 h-3.5 text-primary-600" />
