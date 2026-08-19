@@ -80,14 +80,14 @@ export default function Footer() {
             © {currentYear} Cantina IFRS. Todos os direitos reservados.
           </p>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
             <span>Siga-nos:</span>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/ifrscaxias?igsi=MXZxamtzcG9jaGk4bQ=="
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 rounded-full text-gray-500 hover:text-primary-600 hover:bg-gray-100 transition-colors"
-              aria-label="Instagram"
+              className="p-1 rounded-full text-gray-500 hover:text-primary-600 hover:bg-gray-100 transition-colors inline-flex items-center justify-center"
+              aria-label="Instagram do IFRS"
             >
               <svg 
                 className="w-4 h-4" 
