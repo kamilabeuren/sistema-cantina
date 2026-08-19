@@ -36,6 +36,14 @@ export default function Home() {
     }
   ];
 
+  const scrollToComoFunciona = (e) => {
+    e.preventDefault();
+    const element = document.getElementById("como-funciona");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
   return (
     <div className="space-y-16 sm:space-y-24 py-12 lg:py-20">
       
@@ -57,17 +65,18 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <Link
                 to="/cardapio"
-                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base inline-flex items-center justify-center gap-2 transition-colors"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <span>Ver Cardápio</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <a
-                href="#como-funciona"
-                className="w-full sm:w-auto px-8 py-4 rounded-xl border-2 border-gray-200 hover:bg-gray-100 text-gray-700 font-semibold text-base inline-flex items-center justify-center gap-2 transition-colors"
+              <button
+                type="button"
+                onClick={scrollToComoFunciona}
+                className="w-full sm:w-auto px-8 py-4 rounded-xl border-2 border-gray-200 hover:bg-gray-100 text-gray-700 font-semibold text-base inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <span>Como funciona</span>
-              </a>
+              </button>
             </div>
           </div>
 
