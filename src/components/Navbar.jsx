@@ -15,7 +15,6 @@ export default function Navbar({ cartCount = 2, user = null }) {
 
   const navItems = [
     { label: "Início", path: "/", icon: HomeIcon },
-    { label: "Como Funciona", path: "/como-funciona", icon: HomeIcon },
     { label: "Cardápio", path: "/cardapio", icon: BookOpen },
     { label: "Meus Pedidos", path: "/pedidos", icon: ClipboardList },
   ];

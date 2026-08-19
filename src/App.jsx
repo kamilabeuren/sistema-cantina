@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
 import Pagamento from "./pages/pagamento.jsx";
 import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
-import ComoFunciona from "./pages/ComoFunciona";
 
 function App() {
   return (
@@ -14,7 +13,6 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/como-funciona" element={<ComoFunciona />} />
           <Route path="/admin/produtos" element={<Produtos />} />
           <Route path="/pagamento" element={<Pagamento />} />
           <Route path="/pedido/:id" element={<AcompanhamentoPedido />} />

@@ -20,7 +20,7 @@ export default function Footer() {
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-gray-600">
             <a href="/" className="hover:text-primary-600 transition-colors">Início</a>
-            <a href="/como-funciona" className="hover:text-primary-600 transition-colors">Como Funciona</a>
+            <a href="/#como-funciona" className="hover:text-primary-600 transition-colors">Como Funciona</a>
             <a href="/cardapio" className="hover:text-primary-600 transition-colors">Cardápio</a>
           </div>
 
