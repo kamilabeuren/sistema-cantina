@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
-import Pagamento from "./pages/pagamento.jsx";
+import Pagamento from "./pages/Pagamento";
 import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
 
 function App() {
