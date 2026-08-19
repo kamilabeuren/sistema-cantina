@@ -8,7 +8,7 @@ import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col font-sans antialiased">
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans antialiased">
       <Navbar cartCount={3} />
       <main className="flex-1">
         <Routes>
