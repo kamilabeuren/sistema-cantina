@@ -65,6 +65,23 @@ export default function Home() {
     }
   ];
 
+  const handleScrollToComoFunciona = (e) => {
+    e?.preventDefault();
+    const element = document.getElementById("como-funciona");
+    if (element) {
+      const navbar = document.querySelector("header");
+      const navHeight = navbar ? navbar.offsetHeight : 80;
+      const extraOffset = 24;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - (navHeight + extraOffset);
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth"
+      });
+    }
+  };
+
   return (
     <div className="bg-white py-8 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,7 +128,8 @@ export default function Home() {
                 </Link>
                 <a
                   href="#como-funciona"
-                  className="bg-white w-full sm:w-auto px-8 py-4 rounded-full border border-gray-200 hover:bg-gray-100 text-gray-700 font-semibold text-base inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  onClick={handleScrollToComoFunciona}
+                  className="bg-white w-full sm:w-auto px-8 py-4 rounded-full border border-gray-200 hover:bg-gray-100 text-gray-700 font-semibold text-base inline-flex items-center justify-center gap-2 transition-colors cursor-pointer active:scale-98"
                 >
                   <span>Como funciona</span>
                 </a>
@@ -170,7 +188,7 @@ export default function Home() {
           </div>
 
           {/* 3. Como Funciona: Terceiro no mobile (order-3), Linha 2 alinhado na base no desktop (lg:col-span-8 lg:row-start-2 lg:self-end) */}
-          <div id="como-funciona" className="order-3 lg:col-span-8 lg:row-start-2 lg:self-end w-full relative z-10">
+          <div id="como-funciona" className="scroll-mt-24 sm:scroll-mt-28 order-3 lg:col-span-8 lg:row-start-2 lg:self-end w-full relative z-10">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
               {passos.map((item, idx) => {
                 const Icon = item.icon;
