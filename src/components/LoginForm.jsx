@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { LockKeyhole, Mail } from "lucide-react";
 import { login } from "../services/authService";
 
-export default function LoginForm({ onCreateAccount, onForgotPassword }) {
+export default function LoginForm({
+  onLogin,
+  onCreateAccount,
+  onForgotPassword,
+}) {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -15,8 +19,14 @@ export default function LoginForm({ onCreateAccount, onForgotPassword }) {
     setErro("");
 
     try {
-      login({ email, senha });
-      navigate("/");
+      const user = login({ email, senha });
+      onLogin(user);
+
+      if (user.role === "admin") {
+        navigate("/admin/produtos");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       setErro(error.message);
     }
