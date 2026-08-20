@@ -3,7 +3,7 @@ import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 import ForgotPasswordForm from "../components/ForgotPasswordForm";
 
-export default function Login() {
+export default function Login({ onLogin }) {
   const [view, setView] = useState("login");
 
   return (
@@ -12,6 +12,7 @@ export default function Login() {
         <div className="rounded-3xl border border-gray-100 bg-gray-50 p-6 shadow-sm sm:p-8">
           {view === "login" && (
             <LoginForm
+              onLogin={onLogin}
               onCreateAccount={() => setView("register")}
               onForgotPassword={() => setView("forgot")}
             />
@@ -25,6 +26,15 @@ export default function Login() {
             <ForgotPasswordForm onBackToLogin={() => setView("login")} />
           )}
         </div>
+
+        {view === "login" && (
+          <p className="mt-4 text-center text-xs text-gray-500">
+            Para testar como administrador: {" "}
+            <span className="font-semibold text-gray-700">admin@cantina.com</span>
+            {" · senha: "}
+            <span className="font-semibold text-gray-700">1234</span>
+          </p>
+        )}
       </div>
     </section>
   );
