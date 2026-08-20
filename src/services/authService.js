@@ -24,6 +24,7 @@ export function register({ nome, email, senha }) {
     nome: nome.trim(),
     email: normalizedEmail,
     senha,
+    role: "cliente",
   };
 
   saveUsers([...users, newUser]);
@@ -45,6 +46,7 @@ export function login({ email, senha }) {
     id: user.id,
     nome: user.nome,
     email: user.email,
+    role: user.role,
   };
 
   localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
@@ -74,4 +76,24 @@ export function changePassword({ email, novaSenha }) {
 
   users[userIndex].senha = novaSenha;
   saveUsers(users);
+}
+
+export function ensureDefaultAdmin() {
+  const users = getUsers();
+
+  const adminAlreadyExists = users.some(
+    (user) => user.email === "admin@cantina.com"
+  );
+
+  if (adminAlreadyExists) return;
+
+  const admin = {
+    id: crypto.randomUUID(),
+    nome: "Administrador",
+    email: "admin@cantina.com",
+    senha: "1234",
+    role: "admin",
+  };
+
+  saveUsers([...users, admin]);
 }
