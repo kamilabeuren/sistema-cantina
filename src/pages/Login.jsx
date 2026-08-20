@@ -1,7 +1,7 @@
 import { useState } from "react";
-import LoginForm from "../components/auth/LoginForm";
-import RegisterForm from "../components/auth/RegisterForm";
-import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
+import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
+import ForgotPasswordForm from "../components/ForgotPasswordForm";
 
 export default function Login() {
   const [view, setView] = useState("login");

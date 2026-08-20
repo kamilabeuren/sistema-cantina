@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LockKeyhole, Mail } from "lucide-react";
-import { login } from "../../services/authService";
+import { login } from "../services/authService";
 
 export default function LoginForm({ onCreateAccount, onForgotPassword }) {
   const navigate = useNavigate();
