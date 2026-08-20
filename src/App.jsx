@@ -7,6 +7,7 @@ import Pagamento from "./pages/Pagamento";
 import Carrinho from "./pages/Carrinho";
 import Cardapio from "./pages/Cardapio";
 import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/pagamento" element={<Pagamento />} />
           <Route path="/pedido/:id" element={<AcompanhamentoPedido />} />
           <Route path="/cardapio" element={<Cardapio />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
 
