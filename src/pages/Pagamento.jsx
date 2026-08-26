@@ -1,22 +1,21 @@
 // src/pages/Pagamento.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Wallet, CreditCard, Banknote, ShoppingBag } from "lucide-react";
+import { criarPedido, formatarBRL } from "../services/pedidoService";
+import { listarCarrinho, salvarCarrinho } from "../services/carrinhoService";
+import { getCurrentUser } from "../services/authService";
 
 const TAXA_CONVENIENCIA = 0.06; // 6% sobre o subtotal
 
 export default function Pagamento() {
   const navigate = useNavigate();
-  const [cart, setCart] = useState([]);
+  // O carrinho é lido uma vez ao abrir a tela de pagamento.
+  const [cart] = useState(() => listarCarrinho());
   const [customerName, setCustomerName] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(storedCart);
-  }, []);
 
   const subtotal = useMemo(
     () => cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
@@ -30,8 +29,6 @@ export default function Pagamento() {
     { value: "Cartão", label: "Cartão", icon: CreditCard },
     { value: "Dinheiro", label: "Dinheiro", icon: Banknote },
   ];
-
-  const formatBRL = (value) => `R$ ${value.toFixed(2).replace(".", ",")}`;
 
   const handleFinishOrder = (event) => {
     event.preventDefault();
@@ -52,29 +49,24 @@ export default function Pagamento() {
 
     setSubmitting(true);
 
-    const orderNumber = Math.floor(100000 + Math.random() * 900000);
+    // O pedido é criado pelo pedidoService, que gera o número,
+    // define o status inicial e grava a lista no LocalStorage.
+    const usuario = getCurrentUser();
 
-    const order = {
-      number: orderNumber,
-      customerName: customerName.trim(),
-      paymentMethod,
+    const pedido = criarPedido({
       items: cart,
+      customerName,
+      paymentMethod,
       subtotal,
       taxa,
       total,
-      status: "Recebido",
-      createdAt: new Date().toISOString(),
-    };
+      userId: usuario ? usuario.id : null,
+    });
 
-    localStorage.setItem("order", JSON.stringify(order));
+    // Esvazia o carrinho pelo service para o contador da Navbar atualizar.
+    salvarCarrinho([]);
 
-    const orders = JSON.parse(localStorage.getItem("orders")) || [];
-    orders.push(order);
-    localStorage.setItem("orders", JSON.stringify(orders));
-
-    localStorage.removeItem("cart");
-
-    navigate(`/order/${orderNumber}`);
+    navigate(`/pedido/${pedido.number}`);
   };
 
   return (
@@ -111,7 +103,7 @@ export default function Pagamento() {
                   <li key={item.id} className="flex items-center justify-between py-3 text-sm">
                     <span className="text-gray-700">{item.quantity}x {item.name}</span>
                     <span className="font-semibold text-gray-900">
-                      {formatBRL(item.price * item.quantity)}
+                      {formatarBRL(item.price * item.quantity)}
                     </span>
                   </li>
                 ))}
@@ -121,15 +113,15 @@ export default function Pagamento() {
             <div className="pt-3 border-t border-gray-100 space-y-2 text-sm">
               <div className="flex justify-between text-gray-500">
                 <span>Subtotal</span>
-                <span>{formatBRL(subtotal)}</span>
+                <span>{formatarBRL(subtotal)}</span>
               </div>
               <div className="flex justify-between text-gray-500">
                 <span>Taxa de conveniência</span>
-                <span>{formatBRL(taxa)}</span>
+                <span>{formatarBRL(taxa)}</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-gray-100">
                 <span className="font-bold text-gray-900">Total</span>
-                <span className="font-bold text-primary-600 text-lg">{formatBRL(total)}</span>
+                <span className="font-bold text-primary-600 text-lg">{formatarBRL(total)}</span>
               </div>
             </div>
           </div>

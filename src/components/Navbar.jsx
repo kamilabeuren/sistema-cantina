@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
   ShoppingBag,
@@ -8,16 +8,27 @@ import {
   User,
   Menu,
   X,
+  LayoutDashboard,
+  Package,
 } from "lucide-react";
 
 export default function Navbar({ cartCount = 2, user = null }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
+  const itensCliente = [
     { label: "Início", path: "/", icon: HomeIcon },
     { label: "Cardápio", path: "/cardapio", icon: BookOpen },
     { label: "Meus Pedidos", path: "/pedidos", icon: ClipboardList },
   ];
+
+  // O administrador enxerga os atalhos da área administrativa.
+  const itensAdmin = [
+    { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+    { label: "Pedidos", path: "/admin/pedidos", icon: ClipboardList },
+    { label: "Produtos", path: "/admin/produtos", icon: Package },
+  ];
+
+  const navItems = user?.role === "admin" ? itensAdmin : itensCliente;
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-xs">
@@ -93,10 +104,10 @@ export default function Navbar({ cartCount = 2, user = null }) {
                 className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
               >
                 <div className="w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold text-sm">
-                  {user.name ? user.name[0].toUpperCase() : "U"}
+                  {user.nome ? user.nome[0].toUpperCase() : "U"}
                 </div>
                 <span className="hidden lg:inline text-sm font-medium text-gray-700">
-                  {user.name}
+                  {user.nome}
                 </span>
               </Link>
             ) : (
