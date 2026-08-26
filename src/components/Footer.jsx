@@ -6,11 +6,11 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-white border-t border-gray-200/80 text-gray-600 text-sm mt-auto pt-14 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <footer className="w-full bg-white border-t border-gray-200/80 text-gray-600 text-sm mt-auto pt-10 sm:pt-14 pb-6 sm:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         
         {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
           
           {/* Brand & Slogan */}
           <div className="md:col-span-6 lg:col-span-7 space-y-4">
