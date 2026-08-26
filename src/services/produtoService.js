@@ -11,7 +11,7 @@ export function salvarProdutos(produtos) {
   localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtos));
 }
 
-// Adiciona um novo produto
+// Adiciona um novo produto (Com suporte a Imagem)
 export function adicionarProduto(produto) {
   const produtos = listarProdutos();
   const novoProduto = {
@@ -21,6 +21,7 @@ export function adicionarProduto(produto) {
     preco: Number(produto.preco),
     categoriaId: produto.categoriaId,
     estoque: Number(produto.estoque),
+    imagem: produto.imagem || "", // Salva a imagem em Base64 ou URL
     ativo: true,
   };
   produtos.push(novoProduto);
