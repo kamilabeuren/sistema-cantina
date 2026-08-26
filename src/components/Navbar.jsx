@@ -37,9 +37,9 @@ export default function Navbar({ cartCount = 2, user = null }) {
           
           <Link
             to="/"
-            className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl p-1 transition-all"
+            className="flex items-center gap-2 sm:gap-3 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl p-0.5 sm:p-1 transition-all shrink-0"
           >
-            <div className="h-10 sm:h-12 flex items-center group-hover:scale-105 transition-transform">
+            <div className="h-8 sm:h-12 flex items-center group-hover:scale-105 transition-transform">
               <img
                 src="/ifrs-logo.svg"
                 alt="Instituto Federal Rio Grande do Sul - Logo"
@@ -47,11 +47,11 @@ export default function Navbar({ cartCount = 2, user = null }) {
               />
             </div>
 
-            <div className="flex flex-col border-l border-gray-200 pl-3">
-              <span className="font-bold text-base sm:text-lg leading-tight text-gray-900 group-hover:text-primary-600 transition-colors">
+            <div className="flex flex-col border-l border-gray-200 pl-2 sm:pl-3">
+              <span className="font-bold text-sm sm:text-lg leading-tight text-gray-900 group-hover:text-primary-600 transition-colors">
                 Cantina <span className="text-primary-600">IFRS</span>
               </span>
-              <span className="text-[10px] tracking-wider font-semibold uppercase text-gray-400">
+              <span className="text-[9px] sm:text-[10px] tracking-wider font-semibold uppercase text-gray-400 hidden xs:inline">
                 Sabor & Praticidade
               </span>
             </div>
