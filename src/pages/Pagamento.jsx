@@ -381,24 +381,6 @@ export default function Pagamento() {
             </span>
 
             <div>
-              <label
-                htmlFor="customerName"
-                className="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Nome do cliente
-              </label>
-
-              <input
-                id="customerName"
-                type="text"
-                value={customerName}
-                onChange={(event) => setCustomerName(event.target.value)}
-                placeholder="Digite seu nome"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-
-            <div>
               <p className="mb-2 text-sm font-semibold text-gray-700">
                 Forma de pagamento
               </p>
