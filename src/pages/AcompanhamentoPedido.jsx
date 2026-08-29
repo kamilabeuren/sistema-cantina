@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   CheckCircle2,
@@ -7,15 +7,30 @@ import {
   CreditCard,
   Receipt,
   ArrowLeft,
+  Clock,
+  Circle,
 } from "lucide-react";
+import {
+  buscarPedidoPorNumero,
+  formatarBRL,
+  formatarDataHora,
+  STATUS_PEDIDO,
+  STATUS_CANCELADO,
+  CORES_STATUS,
+} from "../services/pedidoService";
+import { useVersaoPedidos } from "../hooks/useVersaoPedidos";
 
 export default function AcompanhamentoPedido() {
   const { id } = useParams();
 
-  const order = JSON.parse(localStorage.getItem("order"));
-
-  const formatBRL = (value) =>
-    `R$ ${Number(value || 0).toFixed(2).replace(".", ",")}`;
+  // Mantém a tela sincronizada: se o admin mudar o status no painel,
+  // o cliente vê a mudança sem precisar recarregar a página.
+  const versao = useVersaoPedidos();
+  const order = useMemo(
+    () => buscarPedidoPorNumero(id),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- versão é só o gatilho que refaz o cálculo quando um pedido muda
+    [id, versao]
+  );
 
   if (!order) {
     return (
@@ -74,21 +89,69 @@ export default function AcompanhamentoPedido() {
                 Status do pedido
               </span>
 
-              <span className="flex items-center gap-1.5 text-sm font-bold text-primary-600">
-                <CheckCircle2 className="w-4 h-4" />
+              <span
+                className={`px-2.5 py-1 rounded-md border text-xs font-bold ${
+                  CORES_STATUS[order.status] || CORES_STATUS.Recebido
+                }`}
+              >
                 {order.status}
               </span>
             </div>
 
             <div className="border-t border-gray-100 pt-5">
-              <p className="text-sm text-gray-500 mb-1">
-                Número do pedido
-              </p>
-
-              <p className="text-2xl font-extrabold text-gray-900">
-                #{id}
-              </p>
+              <p className="text-sm text-gray-500 mb-1">Número do pedido</p>
+              <p className="text-2xl font-extrabold text-gray-900">#{order.number}</p>
             </div>
+
+            {order.status === STATUS_CANCELADO ? (
+              <div className="border-t border-gray-100 pt-5">
+                <p className="text-sm font-semibold text-accent-600">
+                  Este pedido foi cancelado pela cantina.
+                </p>
+              </div>
+            ) : (
+              <ol className="border-t border-gray-100 pt-5 space-y-4">
+                {STATUS_PEDIDO.map((etapa) => {
+                  const posicaoEtapa = STATUS_PEDIDO.indexOf(etapa);
+                  const posicaoAtual = STATUS_PEDIDO.indexOf(order.status);
+                  const concluida = posicaoEtapa < posicaoAtual;
+                  const atual = posicaoEtapa === posicaoAtual;
+
+                  const registro = (order.historicoStatus || []).find(
+                    (item) => item.status === etapa
+                  );
+
+                  return (
+                    <li key={etapa} className="flex items-start gap-3">
+                      {concluida ? (
+                        <CheckCircle2 className="w-5 h-5 text-primary-600 shrink-0" />
+                      ) : atual ? (
+                        <Clock className="w-5 h-5 text-primary-600 shrink-0 animate-pulse" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-gray-300 shrink-0" />
+                      )}
+
+                      <div>
+                        <p
+                          className={`text-sm ${
+                            concluida || atual
+                              ? "font-semibold text-gray-900"
+                              : "text-gray-400"
+                          }`}
+                        >
+                          {etapa}
+                        </p>
+                        {registro && (
+                          <p className="text-xs text-gray-500">
+                            {formatarDataHora(registro.em)}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
           </div>
 
           {/* Informações do cliente */}
@@ -158,7 +221,7 @@ export default function AcompanhamentoPedido() {
                     </span>
 
                     <span className="font-semibold text-gray-900">
-                      {formatBRL(item.price * item.quantity)}
+                      {formatarBRL(item.price * item.quantity)}
                     </span>
                   </li>
                 ))}
@@ -169,12 +232,12 @@ export default function AcompanhamentoPedido() {
             <div className="pt-3 border-t border-gray-100 space-y-2 text-sm">
               <div className="flex justify-between text-gray-500">
                 <span>Subtotal</span>
-                <span>{formatBRL(order.subtotal)}</span>
+                <span>{formatarBRL(order.subtotal)}</span>
               </div>
 
               <div className="flex justify-between text-gray-500">
                 <span>Taxa de conveniência</span>
-                <span>{formatBRL(order.taxa)}</span>
+                <span>{formatarBRL(order.taxa)}</span>
               </div>
 
               <div className="flex justify-between pt-2 border-t border-gray-100">
@@ -183,7 +246,7 @@ export default function AcompanhamentoPedido() {
                 </span>
 
                 <span className="font-bold text-primary-600 text-lg">
-                  {formatBRL(order.total)}
+                  {formatarBRL(order.total)}
                 </span>
               </div>
             </div>

@@ -9,19 +9,44 @@ import Carrinho from "./pages/Carrinho";
 import Cardapio from "./pages/Cardapio";
 import AcompanhamentoPedido from "./pages/AcompanhamentoPedido";
 import Login from "./pages/Login";
+import MeusPedidos from "./pages/MeusPedidos";
+import AdminPedidos from "./pages/AdminPedidos";
+import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ensureDefaultAdmin, getCurrentUser } from "./services/authService";
+import { listarCarrinho } from "./services/carrinhoService";
 
 function App() {
   const [user, setUser] = useState(getCurrentUser());
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     ensureDefaultAdmin();
   }, []);
 
+  // Mantém o contador da Navbar sempre igual ao carrinho salvo no LocalStorage.
+  useEffect(() => {
+    const atualizarContador = () => {
+      const total = listarCarrinho().reduce(
+        (soma, item) => soma + Number(item.quantity || 0),
+        0
+      );
+      setCartCount(total);
+    };
+
+    atualizarContador();
+    window.addEventListener("carrinhoAtualizado", atualizarContador);
+    window.addEventListener("storage", atualizarContador);
+
+    return () => {
+      window.removeEventListener("carrinhoAtualizado", atualizarContador);
+      window.removeEventListener("storage", atualizarContador);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans antialiased">
-      <Navbar cartCount={3} />
+      <Navbar cartCount={cartCount} user={user} />
 
       <main className="flex-1">
         <Routes>
@@ -39,6 +64,23 @@ function App() {
           <Route path="/pedido/:id" element={<AcompanhamentoPedido />} />
           <Route path="/cardapio" element={<Cardapio />} />
           <Route path="/login" element={<Login onLogin={setUser} />} />
+          <Route path="/pedidos" element={<MeusPedidos />} />
+          <Route
+            path="/admin/pedidos"
+            element={
+              <ProtectedRoute user={user}>
+                <AdminPedidos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute user={user}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
 

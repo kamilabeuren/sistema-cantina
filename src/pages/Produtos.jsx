@@ -17,6 +17,7 @@ export default function Produtos() {
   const [preco, setPreco] = useState("");
   const [estoque, setEstoque] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
+  const [imagem, setImagem] = useState("");
 
   useEffect(() => {
     carregarDados();
@@ -32,12 +33,24 @@ export default function Produtos() {
     }
   }
 
+  function handleImagemChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagem(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   function limparFormulario() {
     setIdEditando(null);
     setNome("");
     setDescricao("");
     setPreco("");
     setEstoque("");
+    setImagem("");
   }
 
   function handleSalvar(e) {
@@ -54,6 +67,7 @@ export default function Produtos() {
       preco: Number(preco),
       estoque: Number(estoque),
       categoriaId,
+      imagem,
     };
 
     if (idEditando) {
@@ -69,10 +83,11 @@ export default function Produtos() {
   function handleEditar(produto) {
     setIdEditando(produto.id);
     setNome(produto.nome);
-    setDescricao(produto.descricao);
+    setDescricao(produto.descricao || "");
     setPreco(produto.preco);
     setEstoque(produto.estoque);
     setCategoriaId(produto.categoriaId);
+    setImagem(produto.imagem || "");
   }
 
   function handleExcluir(id) {
@@ -145,6 +160,26 @@ export default function Produtos() {
           />
         </div>
 
+        {/* Campo de Upload de Imagem */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Imagem do Produto</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImagemChange}
+            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+          />
+          {imagem && (
+            <div className="mt-2">
+              <img
+                src={imagem}
+                alt="Prévia"
+                className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+              />
+            </div>
+          )}
+        </div>
+
         <div className="flex gap-3 pt-2">
           <button
             type="submit"
@@ -174,6 +209,7 @@ export default function Produtos() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100 text-gray-600 text-sm">
+                <th className="p-4">Foto</th>
                 <th className="p-4">Nome</th>
                 <th className="p-4">Preço</th>
                 <th className="p-4">Estoque</th>
@@ -186,6 +222,19 @@ export default function Produtos() {
                 const cat = categorias.find((c) => c.id === p.categoriaId);
                 return (
                   <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="p-4">
+                      {p.imagem ? (
+                        <img
+                          src={p.imagem}
+                          alt={p.nome}
+                          className="w-12 h-12 object-cover rounded-md border border-gray-200"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center text-xs text-gray-400">
+                          Sem foto
+                        </div>
+                      )}
+                    </td>
                     <td className="p-4 font-medium text-gray-800">{p.nome}</td>
                     <td className="p-4 text-gray-600">R$ {Number(p.preco).toFixed(2)}</td>
                     <td className="p-4 text-gray-600">{p.estoque} u.</td>

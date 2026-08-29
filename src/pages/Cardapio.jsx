@@ -1,116 +1,62 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Cardapio.css";
+import { listarProdutos } from "../services/produtoService";
+import { listarCategorias } from "../services/categoriaService";
+import { adicionarCarrinho, listarCarrinho } from "../services/carrinhoService";
 
-const produtos = [
-  {
-    id: 1,
-   nome: "X-Burger",
-    descricao: "Pão, hambúrguer, queijo e molho especial",
-    preco: 22.9,
-    categoria: "Hambúrgueres",
-    imagem: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
-  },
-  {
-    id: 2,
-     nome: "X-Salada",
-    descricao: "Hambúrguer, queijo, alface, tomate e molho",
-    preco: 25.9,
-    categoria: "Hambúrgueres",
-    imagem: "https://images.unsplash.com/photo-1550547660-d9450f859349",
-  },
-  {
-    id: 3,
-    nome: "Batata Frita",
-    descricao: "Batata Frita",
-    preco: 10.0,
-    categoria: "Porção",
-    imagem: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877",
-  },
-  {
-    id: 4,
-    nome: "Nuggets",
-    descricao: "Porção com 8 nuggets crocantes",
-    preco: 18.9,
-    categoria: "Porções",
-    imagem: "https://images.unsplash.com/photo-1562967914-608f82629710",
-  },
-  {
-    id: 5,
-    nome: "Coca-Cola",
-    descricao: "Refrigerante 350ml",
-    preco: 6.9,
-    categoria: "Bebidas",
-    imagem: "https://images.unsplash.com/photo-1554866585-cd94860890b7",
-  },
-  {
-    id: 6,
-    nome: "Suco de Laranja",
-    descricao: "Suco natural de laranja",
-    preco: 8.9,
-    categoria: "Bebidas",
-    imagem: "https://images.unsplash.com/photo-1600271886742-f049cd451bba",
-  },
-];
-
-const categorias = [
-  "Todos",
-  ...new Set(produtos.map((produto) => produto.categoria)),
-];
+function contarItensCarrinho() {
+  return listarCarrinho().reduce((total, item) => total + item.quantity, 0);
+}
 
 function App() {
+  const navigate = useNavigate();
+
+  const [produtos, setProdutos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
-  const [carrinho, setCarrinho] = useState([]);
-  const [carrinhoAberto, setCarrinhoAberto] = useState(false);
+  const [quantidadeCarrinho, setQuantidadeCarrinho] = useState(0);
 
-  const produtosFiltrados = useMemo(
-    () =>
-      categoriaSelecionada === "Todos"
-        ? produtos
-        : produtos.filter(
-            (produto) => produto.categoria === categoriaSelecionada
-          ),
-    [categoriaSelecionada]
+  useEffect(() => {
+    setProdutos(listarProdutos());
+    setCategorias(listarCategorias());
+  }, []);
+
+  useEffect(() => {
+    setQuantidadeCarrinho(contarItensCarrinho());
+
+    const handleAtualizacao = () =>
+      setQuantidadeCarrinho(contarItensCarrinho());
+
+    window.addEventListener("carrinhoAtualizado", handleAtualizacao);
+
+    return () => {
+      window.removeEventListener("carrinhoAtualizado", handleAtualizacao);
+    };
+  }, []);
+
+  const nomesCategorias = useMemo(
+    () => ["Todos", ...categorias.map((categoria) => categoria.nome)],
+    [categorias]
   );
 
-  function adicionarAoCarrinho(produto) {
-    setCarrinho((carrinhoAtual) => {
-      const produtoExistente = carrinhoAtual.find(
-        (item) => item.id === produto.id
-      );
+  const produtosFiltrados = useMemo(() => {
+    if (categoriaSelecionada === "Todos") return produtos;
 
-      if (produtoExistente) {
-        return carrinhoAtual.map((item) =>
-          item.id === produto.id
-            ? { ...item, quantidade: item.quantidade + 1 }
-            : item
-        );
-      }
-
-      return [...carrinhoAtual, { ...produto, quantidade: 1 }];
-    });
-  }
-
-  function removerDoCarrinho(id) {
-    setCarrinho((carrinhoAtual) =>
-      carrinhoAtual
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantidade: item.quantidade - 1 }
-            : item
-        )
-        .filter((item) => item.quantidade > 0)
+    const categoriaAtual = categorias.find(
+      (categoria) => categoria.nome === categoriaSelecionada
     );
+
+    if (!categoriaAtual) return produtos;
+
+    return produtos.filter(
+      (produto) => produto.categoriaId === categoriaAtual.id
+    );
+  }, [produtos, categorias, categoriaSelecionada]);
+
+  function handleAdicionarAoCarrinho(produto) {
+    adicionarCarrinho(produto);
   }
-
-  const quantidadeTotal = carrinho.reduce(
-    (total, item) => total + item.quantidade,
-    0
-  );
-
-  const valorTotal = carrinho.reduce(
-    (total, item) => total + item.preco * item.quantidade,
-    0
-  );
 
   return (
     <div className="app">
@@ -119,22 +65,16 @@ function App() {
           <h1>🍔 Meu Cardápio</h1>
           <p>Escolha seus produtos favoritos</p>
         </div>
-
-        <button
-          className="cart-button"
-          onClick={() => setCarrinhoAberto(true)}
-        >
-          🛒 Carrinho
-          <span>{quantidadeTotal}</span>
-        </button>
       </header>
 
       <main className="container">
         <section className="categorias">
-          {categorias.map((categoria) => (
+          {nomesCategorias.map((categoria) => (
             <button
               key={categoria}
-              className={categoriaSelecionada === categoria ? "ativo" : ""}
+              className={
+                categoriaSelecionada === categoria ? "ativo" : ""
+              }
               onClick={() => setCategoriaSelecionada(categoria)}
             >
               {categoria}
@@ -142,95 +82,65 @@ function App() {
           ))}
         </section>
 
-        <section className="produtos">
-          {produtosFiltrados.map((produto) => (
-            <article className="produto" key={produto.id}>
-              <img src={produto.imagem} alt={produto.nome} />
+        {produtosFiltrados.length === 0 ? (
+          <p style={{ color: "#475569" }}>
+            Nenhum produto cadastrado{" "}
+            {categoriaSelecionada !== "Todos"
+              ? "nessa categoria"
+              : "ainda"}
+            .
+          </p>
+        ) : (
+          <section className="produtos">
+            {produtosFiltrados.map((produto) => (
+              <article className="produto" key={produto.id}>
 
-              <div className="produto-info">
-                <span className="categoria">{produto.categoria}</span>
+                {/* IMAGEM DO PRODUTO */}
+                {produto.imagem ? (
+                  <img
+                    src={produto.imagem}
+                    alt={produto.nome}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                    Sem imagem
+                  </div>
+                )}
 
-                <h2>{produto.nome}</h2>
+                <div className="produto-info">
+                  <span className="categoria">
+                    {categorias.find(
+                      (c) => c.id === produto.categoriaId
+                    )?.nome ?? "Sem categoria"}
+                  </span>
 
-                <p>{produto.descricao}</p>
+                  <h2>{produto.nome}</h2>
 
-                <div className="produto-footer">
-                  <strong>
-                    R$ {produto.preco.toFixed(2).replace(".", ",")}
-                  </strong>
+                  <p>{produto.descricao}</p>
 
-                  <button onClick={() => adicionarAoCarrinho(produto)}>
-                    Adicionar ao Carrinho
-                  </button>
+                  <div className="produto-footer">
+                    <strong>
+                      R${" "}
+                      {Number(produto.preco)
+                        .toFixed(2)
+                        .replace(".", ",")}
+                    </strong>
+
+                    <button
+                      onClick={() =>
+                        handleAdicionarAoCarrinho(produto)
+                      }
+                    >
+                      Adicionar ao Carrinho
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </section>
+              </article>
+            ))}
+          </section>
+        )}
       </main>
-
-      {carrinhoAberto && (
-        <div className="overlay">
-          <aside className="carrinho">
-            <div className="carrinho-header">
-              <h2>🛒 Seu Carrinho</h2>
-
-              <button
-                className="fechar"
-                onClick={() => setCarrinhoAberto(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            {carrinho.length === 0 ? (
-              <div className="carrinho-vazio">
-                <span>🛒</span>
-                <p>Seu carrinho está vazio.</p>
-              </div>
-            ) : (
-              <>
-                <div className="itens-carrinho">
-                  {carrinho.map((item) => (
-                    <div className="item-carrinho" key={item.id}>
-                      <div>
-                        <h3>{item.nome}</h3>
-
-                        <p>
-                          R${" "}
-                          {item.preco.toFixed(2).replace(".", ",")}
-                        </p>
-                      </div>
-
-                      <div className="quantidade">
-                        <button onClick={() => removerDoCarrinho(item.id)}>
-                          −
-                        </button>
-
-                        <span>{item.quantidade}</span>
-
-                        <button onClick={() => adicionarAoCarrinho(item)}>
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="total">
-                  <span>Total</span>
-
-                  <strong>
-                    R$ {valorTotal.toFixed(2).replace(".", ",")}
-                  </strong>
-                </div>
-
-                <button className="finalizar">Finalizar Pedido</button>
-              </>
-            )}
-          </aside>
-        </div>
-      )}
     </div>
   );
 }
