@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -13,12 +13,20 @@ import MeusPedidos from "./pages/MeusPedidos";
 import AdminPedidos from "./pages/AdminPedidos";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { ensureDefaultAdmin, getCurrentUser } from "./services/authService";
 import { listarCarrinho } from "./services/carrinhoService";
+import { ensureDefaultAdmin, getCurrentUser, logout } from "./services/authService";
 
 function App() {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(getCurrentUser());
   const [cartCount, setCartCount] = useState(0);
+  
+  const handleLogout = () => {
+    logout();
+    setUser(null);
+    navigate("/login");
+  };
 
   useEffect(() => {
     ensureDefaultAdmin();
@@ -46,7 +54,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans antialiased">
-      <Navbar cartCount={cartCount} user={user} />
+      <Navbar
+        cartCount={cartCount}
+        user={user}
+        onLogout={handleLogout}
+      />
 
       <main className="flex-1">
         <Routes>
