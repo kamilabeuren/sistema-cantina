@@ -20,7 +20,12 @@ function App() {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(getCurrentUser());
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(() => {
+    return listarCarrinho().reduce(
+      (soma, item) => soma + Number(item.quantity || 0),
+      0
+    );
+  });
   
   const handleLogout = () => {
     logout();

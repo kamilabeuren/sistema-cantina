@@ -12,7 +12,7 @@ import {
   Package,
 } from "lucide-react";
 
-export default function Navbar({ cartCount = 2, user = null }) {
+export default function Navbar({ cartCount = 0, user = null, onLogout }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const itensCliente = [
