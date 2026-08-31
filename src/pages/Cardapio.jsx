@@ -95,17 +95,11 @@ function App() {
             {produtosFiltrados.map((produto) => (
               <article className="produto" key={produto.id}>
 
-                {/* IMAGEM DO PRODUTO */}
-                {produto.imagem ? (
-                  <img
-                    src={produto.imagem}
-                    alt={produto.nome}
-                  />
-                ) : (
-                  <div className="sem-imagem">
-                    Sem imagem
-                  </div>
-                )}
+                <img
+                  src={produto.imagem}
+                  alt={produto.nome}
+                  className="w-full h-48 object-cover rounded-t-lg"
+                />
 
                 <div className="produto-info">
                   <span className="categoria">
