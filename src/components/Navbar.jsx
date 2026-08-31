@@ -104,22 +104,26 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
 
           <div className="flex items-center gap-2 sm:gap-3">
             
-            <Link
-              to="/carrinho"
-              aria-label="Carrinho de compras"
-              className="relative p-2.5 sm:px-4 sm:py-2.5 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 font-medium transition-all flex items-center gap-2 border border-primary-100 group"
-            >
-              <ShoppingBag className="w-5 h-5 text-primary-600 group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:inline text-sm font-semibold">Carrinho</span>
-              
-              {cartCount > 0 && (
-                <span className="flex items-center justify-center min-w-[20px] h-5 px-1 text-xs font-bold text-white bg-accent-500 rounded-full shadow-xs animate-pulse">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+            {user?.role !== "admin" && (
+              <>
+                <Link
+                  to="/carrinho"
+                  aria-label="Carrinho de compras"
+                  className="relative p-2.5 sm:px-4 sm:py-2.5 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 font-medium transition-all flex items-center gap-2 border border-primary-100 group"
+                >
+                  <ShoppingBag className="w-5 h-5 text-primary-600 group-hover:scale-110 transition-transform" />
+                  <span className="hidden sm:inline text-sm font-semibold">Carrinho</span>
+                  
+                  {cartCount > 0 && (
+                    <span className="flex items-center justify-center min-w-[20px] h-5 px-1 text-xs font-bold text-white bg-accent-500 rounded-full shadow-xs animate-pulse">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
 
-            <div className="hidden sm:block h-6 w-px bg-gray-200" />
+                <div className="hidden sm:block h-6 w-px bg-gray-200" />
+              </>
+            )}
 
             {user ? (
               <div className="relative" ref={userMenuRef}>
@@ -341,21 +345,23 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
           })}
 
           <div className="pt-2 border-t border-gray-100 mt-2 space-y-2">
-            <Link
-              to="/carrinho"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between px-4 py-3 rounded-xl bg-primary-50 text-primary-700 font-semibold"
-            >
-              <div className="flex items-center gap-3">
-                <ShoppingBag className="w-5 h-5" />
-                <span>Ver Carrinho</span>
-              </div>
-              {cartCount > 0 && (
-                <span className="px-2 py-0.5 text-xs font-bold text-white bg-accent-500 rounded-full">
-                  {cartCount} {cartCount === 1 ? "item" : "itens"}
-                </span>
-              )}
-            </Link>
+            {user?.role !== "admin" && (
+              <Link
+                to="/carrinho"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-4 py-3 rounded-xl bg-primary-50 text-primary-700 font-semibold"
+              >
+                <div className="flex items-center gap-3">
+                  <ShoppingBag className="w-5 h-5" />
+                  <span>Ver Carrinho</span>
+                </div>
+                {cartCount > 0 && (
+                  <span className="px-2 py-0.5 text-xs font-bold text-white bg-accent-500 rounded-full">
+                    {cartCount} {cartCount === 1 ? "item" : "itens"}
+                  </span>
+                )}
+              </Link>
+            )}
 
             {user ? (
               <div className="space-y-2 pt-2 border-t border-gray-100">
