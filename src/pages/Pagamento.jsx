@@ -543,6 +543,40 @@ export default function Pagamento() {
                 >
                   Pagar
                 </button>
+                <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs text-gray-600">
+                <p className="font-bold text-gray-700 mb-1">
+                  Dados para teste
+                </p>
+
+                <p>
+                  Nome:{" "}
+                  <span className="font-semibold">
+                    TESTE CARTAO
+                  </span>
+                </p>
+
+                <p>
+                  Cartão:{" "}
+                  <span className="font-semibold">
+                    4111 1111 1111 1111
+                  </span>
+                </p>
+
+                <p>
+                  Validade:{" "}
+                  <span className="font-semibold">12/30</span>
+                  {" · "}
+                  CVV:{" "}
+                  <span className="font-semibold">123</span>
+                </p>
+
+                <p>
+                  CPF:{" "}
+                  <span className="font-semibold">
+                    52998224725
+                  </span>
+                </p>
+              </div>
               </form>
             )}
 
