@@ -1,0 +1,32 @@
+export const PRODUTOS_INICIAIS = [
+  {
+    id: "prod-inicial-1",
+    nome: "Combo Pão de Queijo + Suco",
+    descricao: "3 pães artesanais e suco natural",
+    preco: 9.5,
+    categoriaId: "cat-1",
+    estoque: 10,
+    imagem: "/combo-pao-queijo.jpg",
+    ativo: true,
+  },
+  {
+    id: "prod-inicial-2",
+    nome: "Burger Smash Especial",
+    descricao: "Blend 160g, cheddar, bacon e salada",
+    preco: 17.5,
+    categoriaId: "cat-1",
+    estoque: 10,
+    imagem: "/burger-artesanal.jpg",
+    ativo: true,
+  },
+  {
+    id: "prod-inicial-3",
+    nome: "Sanduíche Natural de Frango",
+    descricao: "Pão integral, frango grelhado e salada",
+    preco: 12,
+    categoriaId: "cat-1",
+    estoque: 10,
+    imagem: "/sanduiche-natural.jpg",
+    ativo: true,
+  },
+];
