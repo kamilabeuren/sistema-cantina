@@ -1,9 +1,16 @@
+import { PRODUTOS_INICIAIS } from "../data/produtosIniciais";
 const CHAVE_PRODUTOS = "produtos";
 
 // Retorna a lista de produtos
 export function listarProdutos() {
   const produtos = localStorage.getItem(CHAVE_PRODUTOS);
-  return produtos ? JSON.parse(produtos) : [];
+
+  if (!produtos) {
+    salvarProdutos(PRODUTOS_INICIAIS);
+    return PRODUTOS_INICIAIS;
+  }
+
+  return JSON.parse(produtos);
 }
 
 // Salva a lista inteira no LocalStorage
