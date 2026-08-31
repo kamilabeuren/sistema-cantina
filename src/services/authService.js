@@ -85,15 +85,33 @@ export function ensureDefaultAdmin() {
     (user) => user.email === "admin@cantina.com"
   );
 
-  if (adminAlreadyExists) return;
+  const alunoAlreadyExists = users.some(
+    (user) => user.email === "aluno@cantina.com"
+  );
 
-  const admin = {
-    id: crypto.randomUUID(),
-    nome: "Administrador",
-    email: "admin@cantina.com",
-    senha: "1234",
-    role: "admin",
-  };
+  const newUsers = [...users];
 
-  saveUsers([...users, admin]);
+  // Cria o administrador de teste caso ainda não exista
+  if (!adminAlreadyExists) {
+    newUsers.push({
+      id: crypto.randomUUID(),
+      nome: "Administrador",
+      email: "admin@cantina.com",
+      senha: "1234",
+      role: "admin",
+    });
+  }
+
+  // Cria o aluno de teste caso ainda não exista
+  if (!alunoAlreadyExists) {
+    newUsers.push({
+      id: crypto.randomUUID(),
+      nome: "Aluno Teste",
+      email: "aluno@cantina.com",
+      senha: "1234",
+      role: "cliente",
+    });
+  }
+
+  saveUsers(newUsers);
 }

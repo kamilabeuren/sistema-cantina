@@ -29,10 +29,25 @@ export default function Login({ onLogin }) {
 
         {view === "login" && (
           <p className="mt-4 text-center text-xs text-gray-500">
-            Para testar como administrador: {" "}
-            <span className="font-semibold text-gray-700">admin@cantina.com</span>
+            <span className="font-semibold text-gray-700">
+              Admin:
+            </span>{" "}
+            admin@cantina.com
             {" · senha: "}
-            <span className="font-semibold text-gray-700">1234</span>
+            <span className="font-semibold text-gray-700">
+              1234
+            </span>
+
+            <br />
+
+            <span className="font-semibold text-gray-700">
+              Aluno:
+            </span>{" "}
+            aluno@cantina.com
+            {" · senha: "}
+            <span className="font-semibold text-gray-700">
+              1234
+            </span>
           </p>
         )}
       </div>
