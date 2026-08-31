@@ -13,6 +13,7 @@ import {
   LogOut,
   ChevronDown,
   ShieldCheck,
+  GraduationCap,
 } from "lucide-react";
 
 export default function Navbar({ cartCount = 0, user = null, onLogout }) {
@@ -50,6 +51,7 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
   ];
 
   const navItems = user?.role === "admin" ? itensAdmin : itensCliente;
+  const isEstudante = user && user.role !== "admin";
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-xs">
@@ -132,25 +134,31 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
                     aria-haspopup="true"
                   >
                     <div className="relative">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-600 via-emerald-600 to-teal-500 text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-primary-500/20">
+                      <div className={`w-8 h-8 rounded-full ${
+                        isEstudante
+                          ? "bg-gradient-to-tr from-primary-700 via-emerald-600 to-teal-500"
+                          : "bg-gradient-to-tr from-amber-600 via-emerald-600 to-teal-600"
+                      } text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-primary-500/20`}>
                         {user.nome ? user.nome[0].toUpperCase() : "U"}
                       </div>
-                      {user.role === "admin" && (
+                      {user.role === "admin" ? (
                         <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-500 rounded-full border-2 border-white" title="Admin" />
+                      ) : (
+                        <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white ring-1 ring-emerald-400/40" title="Estudante ativo" />
                       )}
                     </div>
 
                     <div className="flex items-center gap-1.5 text-left">
-                      <span className="text-xs sm:text-sm font-semibold text-gray-800 max-w-[100px] truncate">
+                      <span className="text-xs sm:text-sm font-semibold text-gray-800 max-w-[90px] sm:max-w-[110px] truncate">
                         {user.nome}
                       </span>
                       {user.role === "admin" ? (
-                        <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold tracking-wider text-emerald-800 bg-emerald-100/90 rounded-full border border-emerald-200/80">
-                          Admin
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase text-amber-800 bg-amber-100/90 rounded-full border border-amber-200/80">
+                          <ShieldCheck className="w-3 h-3 text-amber-700" /> Admin
                         </span>
                       ) : (
-                        <span className="hidden md:inline-flex items-center px-2 py-0.5 text-[10px] font-medium text-gray-600 bg-gray-200/60 rounded-full">
-                          Estudante
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase text-primary-700 bg-primary-100/90 rounded-full border border-primary-200/80">
+                          <GraduationCap className="w-3 h-3 text-primary-600" /> Estudante
                         </span>
                       )}
                     </div>
@@ -176,24 +184,28 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
 
                 {/* Dropdown Menu suspenso */}
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-gray-100">
+                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-gray-100">
                     
                     {/* Header do Dropdown */}
-                    <div className="px-4 py-2.5 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary-600 to-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-2 ring-primary-500/20 shrink-0">
+                    <div className="px-4 py-3 flex items-center gap-3">
+                      <div className={`w-11 h-11 rounded-full ${
+                        isEstudante
+                          ? "bg-gradient-to-tr from-primary-700 via-emerald-600 to-teal-500"
+                          : "bg-gradient-to-tr from-amber-600 via-emerald-600 to-teal-600"
+                      } text-white flex items-center justify-center font-bold text-base shadow-xs ring-2 ring-primary-500/20 shrink-0`}>
                         {user.nome ? user.nome[0].toUpperCase() : "U"}
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-bold text-gray-900 truncate">{user.nome}</p>
-                        <p className="text-xs text-gray-500 truncate">{user.email || (user.role === "admin" ? "admin@cantina.com" : "estudante")}</p>
+                        <p className="text-xs text-gray-500 truncate">{user.email || (user.role === "admin" ? "admin@cantina.com" : "estudante@ifrs.edu.br")}</p>
                         <div className="mt-1">
                           {user.role === "admin" ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold text-emerald-800 bg-emerald-50 rounded-md border border-emerald-200">
-                              <ShieldCheck className="w-3 h-3 text-emerald-600" /> Administrador
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-bold text-amber-800 bg-amber-50 rounded-md border border-amber-200">
+                              <ShieldCheck className="w-3 h-3 text-amber-600" /> Administrador da Cantina
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium text-gray-700 bg-gray-100 rounded-md">
-                              <User className="w-3 h-3 text-gray-500" /> Estudante
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-semibold text-primary-700 bg-primary-50 rounded-md border border-primary-100">
+                              <GraduationCap className="w-3.5 h-3.5 text-primary-600" /> Estudante IFRS
                             </span>
                           )}
                         </div>
@@ -201,7 +213,7 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
                     </div>
 
                     {/* Atalhos Rápidos */}
-                    <div className="py-1.5 px-1.5 space-y-0.5">
+                    <div className="py-2 px-1.5 space-y-0.5">
                       {user.role === "admin" ? (
                         <>
                           <Link
@@ -237,7 +249,22 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
                             className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-700 transition-colors"
                           >
                             <BookOpen className="w-4 h-4 text-gray-400" />
-                            <span>Ver Cardápio</span>
+                            <span>Cardápio Digital</span>
+                          </Link>
+                          <Link
+                            to="/carrinho"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-700 transition-colors"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <ShoppingBag className="w-4 h-4 text-gray-400" />
+                              <span>Meu Carrinho</span>
+                            </div>
+                            {cartCount > 0 && (
+                              <span className="px-2 py-0.5 text-[10px] font-bold text-white bg-accent-500 rounded-full">
+                                {cartCount}
+                              </span>
+                            )}
                           </Link>
                           <Link
                             to="/pedidos"
@@ -345,12 +372,12 @@ export default function Navbar({ cartCount = 0, user = null, onLogout }) {
                     </div>
                   </div>
                   {user.role === "admin" ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 rounded-full border border-emerald-200/80">
-                      <ShieldCheck className="w-3 h-3" /> Admin
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 rounded-full border border-amber-200/80">
+                      <ShieldCheck className="w-3 h-3 text-amber-700" /> Admin
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200/70 rounded-full">
-                      Estudante
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-700 bg-primary-100 rounded-full border border-primary-200/80">
+                      <GraduationCap className="w-3 h-3 text-primary-600" /> Estudante
                     </span>
                   )}
                 </div>
