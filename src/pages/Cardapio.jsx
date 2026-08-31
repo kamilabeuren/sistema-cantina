@@ -100,10 +100,9 @@ function App() {
                   <img
                     src={produto.imagem}
                     alt={produto.nome}
-                    className="w-full h-48 object-cover rounded-t-lg"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                  <div className="sem-imagem">
                     Sem imagem
                   </div>
                 )}
