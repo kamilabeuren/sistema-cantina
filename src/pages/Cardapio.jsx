@@ -60,10 +60,27 @@ function App() {
 
   return (
     <div className="app">
-      <header className="header">
-        <div>
-          <h1>🍔 Meu Cardápio</h1>
-          <p>Escolha seus produtos favoritos</p>
+      <header className="bg-white font-sans">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-6">
+          <div className="space-y-3 text-center">
+
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 text-gray-900 text-xs font-bold tracking-wide">
+              Cantina digital IFRS
+            </span>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
+              Escolha seu lanche.
+              <br />
+              <span className="text-primary-600">
+                Sem perder o intervalo.
+              </span>
+            </h1>
+
+            <p className="text-sm sm:text-base text-gray-600 max-w-xl leading-relaxed mx-auto">
+              Confira nosso cardápio e escolha seus produtos favoritos.
+            </p>
+
+          </div>
         </div>
       </header>
 
