@@ -5,6 +5,7 @@ import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from "lucide-react";
 import {
   listarCarrinho,
   alterarQuantidade,
+  incrementarQuantidade,
   excluirCarrinho,
 } from "../services/carrinhoService";
 
@@ -33,7 +34,7 @@ export default function Carrinho() {
 
   const total = itens.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // Decremento vai confirmar antes de remover quando a quantidade for 1
+  // Diminuição vai confirmar antes de remover quando a quantidade for 1
   const botaoDecrementar = (item) => {
     if (item.quantity === 1) {
       const confirmar = window.confirm(
@@ -47,11 +48,18 @@ export default function Carrinho() {
     alterarQuantidade(item.id, { quantity: item.quantity - 1 });
   };
 
+  // Aumento agora passa pela verificação de estoque do service
   const botaoIncrementar = (item) => {
-    alterarQuantidade(item.id, { quantity: item.quantity + 1 });
+    const resultado = incrementarQuantidade(item.id);
+
+    if (!resultado.sucesso && resultado.motivo === "estoque_insuficiente") {
+      window.alert(
+        `Não há mais unidades disponíveis de "${item.name}". Estoque atual: ${resultado.estoqueDisponivel}.`
+      );
+    }
   };
 
-  // Observação salva quando o campo perde o foco
+  // Observação salva quando o campo perde o foco (pra não perder oq anotou ao fazer outra ação)
   const notaSalvarSemFoco = (item, event) => {
     const texto = event.target.value.slice(0, MAX_NOTE_LENGTH);
     if (texto !== item.note) {
@@ -64,7 +72,7 @@ export default function Carrinho() {
         `Remover "${item.name}" do carrinho?`
     );
     if (confirmar) {
-        excluirCarrinho(item.id); //mesma lógica de confirmação
+        excluirCarrinho(item.id); //mesma lógica de confirmação do botão de diminuição
     }
     return;
   };

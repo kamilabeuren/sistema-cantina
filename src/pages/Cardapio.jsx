@@ -55,8 +55,14 @@ function App() {
   }, [produtos, categorias, categoriaSelecionada]);
 
   function handleAdicionarAoCarrinho(produto) {
-    adicionarCarrinho(produto);
+  const resultado = adicionarCarrinho(produto);
+
+  if (!resultado.sucesso && resultado.motivo === "estoque_insuficiente") {
+    window.alert(
+      `Estoque insuficiente para "${produto.nome}". Disponível: ${resultado.estoqueDisponivel}.`
+    );
   }
+}
 
   return (
     <div className="app">
