@@ -10,6 +10,7 @@ import {
   ChevronDown,
   XCircle,
   LayoutDashboard,
+  MessageSquare,
 } from "lucide-react";
 import {
   filtrarPedidos,
@@ -20,6 +21,7 @@ import {
   formatarBRL,
   formatarDataHora,
   TODOS_STATUS,
+  STATUS_PEDIDO,
   STATUS_CANCELADO,
   CORES_STATUS,
 } from "../services/pedidoService";
@@ -44,7 +46,25 @@ export default function AdminPedidos() {
     avancarStatusPedido(numero);
   }
 
-  function handleAlterarStatus(numero, novoStatus) {
+  // Avançar é o caso comum e acontece num clique só.
+  // Voltar o pedido para uma etapa anterior pede confirmação, porque na
+  // correria do balcão é fácil registrar errado e o cliente ver na tela dele.
+  function handleAlterarStatus(numero, statusAtual, novoStatus) {
+    if (novoStatus === statusAtual) return;
+
+    const posicaoAtual = STATUS_PEDIDO.indexOf(statusAtual);
+    const posicaoNova = STATUS_PEDIDO.indexOf(novoStatus);
+    const estaVoltando =
+      posicaoAtual !== -1 && posicaoNova !== -1 && posicaoNova < posicaoAtual;
+
+    if (estaVoltando) {
+      const confirmado = window.confirm(
+        `Voltar o pedido #${numero} de "${statusAtual}" para "${novoStatus}"?\n\n` +
+          "O cliente vê essa mudança na tela de acompanhamento dele."
+      );
+      if (!confirmado) return;
+    }
+
     alterarStatusPedido(numero, novoStatus);
   }
 
@@ -124,6 +144,9 @@ export default function AdminPedidos() {
         <div className="space-y-3">
           {pedidos.map((pedido) => {
             const seguinte = proximoStatus(pedido.status);
+            const temObservacao = (pedido.items || []).some(
+              (item) => item.note && item.note.trim() !== ""
+            );
             const finalizado =
               pedido.status === "Entregue" || pedido.status === STATUS_CANCELADO;
             const aberto = expandido === pedido.number;
@@ -157,6 +180,15 @@ export default function AdminPedidos() {
                         {(pedido.items || []).length}{" "}
                         {(pedido.items || []).length === 1 ? "item" : "itens"}
                       </p>
+
+                      {/* Sem este aviso o funcionário teria que abrir todos os
+                          pedidos para descobrir quais têm observação. */}
+                      {temObservacao && (
+                        <span className="mt-1 inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-200 px-1.5 py-0.5 text-[11px] font-bold text-amber-800">
+                          <MessageSquare className="w-3 h-3" />
+                          Observação do cliente
+                        </span>
+                      )}
                     </div>
                   </button>
 
@@ -178,7 +210,9 @@ export default function AdminPedidos() {
                   <div className="flex items-center gap-2 shrink-0">
                     <select
                       value={pedido.status}
-                      onChange={(e) => handleAlterarStatus(pedido.number, e.target.value)}
+                      onChange={(e) =>
+                        handleAlterarStatus(pedido.number, pedido.status, e.target.value)
+                      }
                       aria-label={`Status do pedido ${pedido.number}`}
                       className="px-3 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
@@ -223,16 +257,25 @@ export default function AdminPedidos() {
                       </h2>
                       <ul className="divide-y divide-gray-200">
                         {(pedido.items || []).map((item) => (
-                          <li
-                            key={item.id}
-                            className="flex justify-between py-2 text-sm"
-                          >
-                            <span className="text-gray-700">
-                              {item.quantity}x {item.name}
-                            </span>
-                            <span className="font-semibold text-gray-900">
-                              {formatarBRL(item.price * item.quantity)}
-                            </span>
+                          <li key={item.id} className="py-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-700">
+                                {item.quantity}x {item.name}
+                              </span>
+                              <span className="font-semibold text-gray-900">
+                                {formatarBRL(item.price * item.quantity)}
+                              </span>
+                            </div>
+
+                            {/* Observação que o cliente escreveu no carrinho.
+                                É o que a cozinha precisa ver: alergia, item a
+                                remover, pedido especial. */}
+                            {item.note && item.note.trim() !== "" && (
+                              <p className="mt-1.5 flex items-start gap-1.5 rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1.5 text-xs text-amber-900">
+                                <MessageSquare className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                                <span>{item.note}</span>
+                              </p>
+                            )}
                           </li>
                         ))}
                       </ul>
