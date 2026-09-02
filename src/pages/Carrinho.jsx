@@ -48,7 +48,7 @@ export default function Carrinho() {
     alterarQuantidade(item.id, { quantity: item.quantity - 1 });
   };
 
-  // Aumento agora passa pela verificação de estoque do service
+  // Incremento agora passa pela verificação de estoque do service
   const botaoIncrementar = (item) => {
     const resultado = incrementarQuantidade(item.id);
 
@@ -59,7 +59,7 @@ export default function Carrinho() {
     }
   };
 
-  // Observação salva quando o campo perde o foco (pra não perder oq anotou ao fazer outra ação)
+   // Observação salva quando o campo perde o foco (pra não perder oq anotou ao fazer outra ação)
   const notaSalvarSemFoco = (item, event) => {
     const texto = event.target.value.slice(0, MAX_NOTE_LENGTH);
     if (texto !== item.note) {
@@ -108,17 +108,31 @@ export default function Carrinho() {
                 className="border border-gray-200 bg-white rounded-2xl p-5 space-y-4"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-semibold text-gray-900">{item.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {formatBRL(item.price)} / unidade
-                    </p>
+                  <div className="flex items-start gap-3 min-w-0">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 rounded-xl object-cover border border-gray-200 shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0">
+                        <ShoppingBag className="w-6 h-6 text-gray-300" />
+                      </div>
+                    )}
+
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900 truncate">{item.name}</p>
+                      <p className="text-sm text-gray-500">
+                        {formatBRL(item.price)} / unidade
+                      </p>
+                    </div>
                   </div>
 
                   <button
                     onClick={() => removerItem(item)}
                     aria-label={`Remover ${item.name}`}
-                    className="text-gray-400 hover:text-accent-600 transition-colors"
+                    className="text-gray-400 hover:text-accent-600 transition-colors shrink-0"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
