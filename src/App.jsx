@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import RequireLogin from "./components/RequireLogin";
 import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
 import Pagamento from "./pages/Pagamento";
@@ -84,7 +85,12 @@ function App() {
             }
           />
           <Route path="/carrinho" element={<Carrinho />} />
-          <Route path="/pagamento" element={<Pagamento />} />
+          <Route path="/pagamento" element={
+            <RequireLogin user={user}>
+              <Pagamento />
+            </RequireLogin>
+            }
+          />
           <Route path="/pedido/:id" element={<AcompanhamentoPedido />} />
           <Route path="/cardapio" element={<Cardapio />} />
           <Route path="/login" element={<Login onLogin={setUser} />} />
