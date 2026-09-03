@@ -23,7 +23,7 @@ export default function LoginForm({
       onLogin(user);
 
       if (user.role === "admin") {
-        navigate("/admin/produtos");
+        navigate("/admin/dashboard");
       } else {
         navigate("/");
       }
