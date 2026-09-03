@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -18,6 +18,8 @@ import { ensureDefaultAdmin, getCurrentUser, logout } from "./services/authServi
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
 
   const [user, setUser] = useState(getCurrentUser());
   const [cartCount, setCartCount] = useState(() => {
@@ -59,11 +61,13 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans antialiased">
-      <Navbar
-        cartCount={cartCount}
-        user={user}
-        onLogout={handleLogout}
-      />
+      {!isLoginPage && (
+        <Navbar
+          cartCount={cartCount}
+          user={user}
+          onLogout={handleLogout}
+        />
+      )}
 
       <main className="flex-1">
         <Routes>
