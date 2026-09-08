@@ -1,4 +1,5 @@
 import { PRODUTOS_INICIAIS } from "../data/produtosIniciais";
+
 const CHAVE_PRODUTOS = "produtos";
 
 // Retorna a lista de produtos
@@ -10,29 +11,46 @@ export function listarProdutos() {
     return PRODUTOS_INICIAIS;
   }
 
-  return JSON.parse(produtos);
+  try {
+    return JSON.parse(produtos);
+  } catch {
+    salvarProdutos(PRODUTOS_INICIAIS);
+    return PRODUTOS_INICIAIS;
+  }
 }
 
 // Salva a lista inteira no LocalStorage
 export function salvarProdutos(produtos) {
-  localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtos));
+  localStorage.setItem(
+    CHAVE_PRODUTOS,
+    JSON.stringify(produtos)
+  );
+
+  // Atualiza telas abertas
+  window.dispatchEvent(
+    new Event("produtosAtualizados")
+  );
 }
 
-// Baixa do estoque após a confirmação de um pedido
+// Baixa o estoque após a confirmação do pedido
 export function baixarEstoque(itens) {
   const produtos = listarProdutos();
 
   itens.forEach((item) => {
-    const index = produtos.findIndex((produto) => produto.id === item.id);
+    const index = produtos.findIndex(
+      (produto) => produto.id === item.id
+    );
 
     if (index !== -1) {
-      const quantidadeVendida = Number(item.quantity) || 0;
+      const quantidadeVendida =
+        Number(item.quantity) || 0;
 
       produtos[index] = {
         ...produtos[index],
         estoque: Math.max(
           0,
-          Number(produtos[index].estoque) - quantidadeVendida
+          Number(produtos[index].estoque) -
+            quantidadeVendida
         ),
       };
     }
@@ -41,9 +59,10 @@ export function baixarEstoque(itens) {
   salvarProdutos(produtos);
 }
 
-// Adiciona um novo produto (Com suporte a Imagem)
+// Adiciona um novo produto
 export function adicionarProduto(produto) {
   const produtos = listarProdutos();
+
   const novoProduto = {
     id: crypto.randomUUID(),
     nome: produto.nome,
@@ -51,27 +70,45 @@ export function adicionarProduto(produto) {
     preco: Number(produto.preco),
     categoriaId: produto.categoriaId,
     estoque: Number(produto.estoque),
-    imagem: produto.imagem || "", // Salva a imagem em Base64 ou URL
+    imagem: produto.imagem || "",
     ativo: true,
   };
+
   produtos.push(novoProduto);
+
   salvarProdutos(produtos);
+
   return novoProduto;
 }
 
-// Editar produto existente
-export function editarProduto(id, dadosAtualizados) {
+// Edita produto existente
+export function editarProduto(
+  id,
+  dadosAtualizados
+) {
   const produtos = listarProdutos();
-  const index = produtos.findIndex((p) => p.id === id);
+
+  const index = produtos.findIndex(
+    (produto) => produto.id === id
+  );
+
   if (index !== -1) {
-    produtos[index] = { ...produtos[index], ...dadosAtualizados };
+    produtos[index] = {
+      ...produtos[index],
+      ...dadosAtualizados,
+    };
+
     salvarProdutos(produtos);
   }
 }
 
-// Excluir produto
+// Exclui produto
 export function excluirProduto(id) {
   const produtos = listarProdutos();
-  const produtosFiltrados = produtos.filter((p) => p.id !== id);
+
+  const produtosFiltrados = produtos.filter(
+    (produto) => produto.id !== id
+  );
+
   salvarProdutos(produtosFiltrados);
 }

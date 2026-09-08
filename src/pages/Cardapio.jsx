@@ -3,10 +3,16 @@ import { useNavigate } from "react-router-dom";
 import "./Cardapio.css";
 import { listarProdutos } from "../services/produtoService";
 import { listarCategorias } from "../services/categoriaService";
-import { adicionarCarrinho, listarCarrinho } from "../services/carrinhoService";
+import {
+  adicionarCarrinho,
+  listarCarrinho,
+} from "../services/carrinhoService";
 
 function contarItensCarrinho() {
-  return listarCarrinho().reduce((total, item) => total + item.quantity, 0);
+  return listarCarrinho().reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 }
 
 function App() {
@@ -14,55 +20,107 @@ function App() {
 
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
-  const [quantidadeCarrinho, setQuantidadeCarrinho] = useState(0);
+  const [categoriaSelecionada, setCategoriaSelecionada] =
+    useState("Todos");
+  const [quantidadeCarrinho, setQuantidadeCarrinho] =
+    useState(0);
 
+  // Carrega produtos e categorias
   useEffect(() => {
     setProdutos(listarProdutos());
     setCategorias(listarCategorias());
   }, []);
 
+  // Atualiza o contador do carrinho
   useEffect(() => {
     setQuantidadeCarrinho(contarItensCarrinho());
 
-    const handleAtualizacao = () =>
+    const handleAtualizacao = () => {
       setQuantidadeCarrinho(contarItensCarrinho());
+    };
 
-    window.addEventListener("carrinhoAtualizado", handleAtualizacao);
+    window.addEventListener(
+      "carrinhoAtualizado",
+      handleAtualizacao
+    );
 
     return () => {
-      window.removeEventListener("carrinhoAtualizado", handleAtualizacao);
+      window.removeEventListener(
+        "carrinhoAtualizado",
+        handleAtualizacao
+      );
+    };
+  }, []);
+
+  // Atualiza os produtos quando houver alteração no estoque
+  useEffect(() => {
+    const handleProdutosAtualizados = () => {
+      setProdutos(listarProdutos());
+    };
+
+    window.addEventListener(
+      "produtosAtualizados",
+      handleProdutosAtualizados
+    );
+
+    return () => {
+      window.removeEventListener(
+        "produtosAtualizados",
+        handleProdutosAtualizados
+      );
     };
   }, []);
 
   const nomesCategorias = useMemo(
-    () => ["Todos", ...categorias.map((categoria) => categoria.nome)],
+    () => [
+      "Todos",
+      ...categorias.map((categoria) => categoria.nome),
+    ],
     [categorias]
   );
 
   const produtosFiltrados = useMemo(() => {
-    if (categoriaSelecionada === "Todos") return produtos;
+    if (categoriaSelecionada === "Todos") {
+      return produtos;
+    }
 
     const categoriaAtual = categorias.find(
-      (categoria) => categoria.nome === categoriaSelecionada
+      (categoria) =>
+        categoria.nome === categoriaSelecionada
     );
 
-    if (!categoriaAtual) return produtos;
+    if (!categoriaAtual) {
+      return produtos;
+    }
 
     return produtos.filter(
-      (produto) => produto.categoriaId === categoriaAtual.id
+      (produto) =>
+        produto.categoriaId === categoriaAtual.id
     );
-  }, [produtos, categorias, categoriaSelecionada]);
+  }, [
+    produtos,
+    categorias,
+    categoriaSelecionada,
+  ]);
 
   function handleAdicionarAoCarrinho(produto) {
-  const resultado = adicionarCarrinho(produto);
+    // Não permite adicionar produto sem estoque
+    if (Number(produto.estoque) <= 0) {
+      return;
+    }
 
-  if (!resultado.sucesso && resultado.motivo === "estoque_insuficiente") {
-    window.alert(
-      `Estoque insuficiente para "${produto.nome}". Disponível: ${resultado.estoqueDisponivel}.`
-    );
+    const resultado = adicionarCarrinho(produto);
+
+    // Se a quantidade disponível já foi atingida,
+    // simplesmente não adiciona mais.
+    // Não usamos alert ou modal.
+    if (
+      !resultado.sucesso &&
+      resultado.motivo === "estoque_insuficiente"
+    ) {
+      return;
+    }
   }
-}
 
   return (
     <div className="app">
@@ -77,6 +135,7 @@ function App() {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
               Escolha seu lanche.
               <br />
+
               <span className="text-primary-600">
                 Sem perder o intervalo.
               </span>
@@ -91,20 +150,27 @@ function App() {
       </header>
 
       <main className="container">
+
+        {/* Categorias */}
         <section className="categorias">
           {nomesCategorias.map((categoria) => (
             <button
               key={categoria}
               className={
-                categoriaSelecionada === categoria ? "ativo" : ""
+                categoriaSelecionada === categoria
+                  ? "ativo"
+                  : ""
               }
-              onClick={() => setCategoriaSelecionada(categoria)}
+              onClick={() =>
+                setCategoriaSelecionada(categoria)
+              }
             >
               {categoria}
             </button>
           ))}
         </section>
 
+        {/* Produtos */}
         {produtosFiltrados.length === 0 ? (
           <p style={{ color: "#475569" }}>
             Nenhum produto cadastrado{" "}
@@ -115,45 +181,89 @@ function App() {
           </p>
         ) : (
           <section className="produtos">
-            {produtosFiltrados.map((produto) => (
-              <article className="produto" key={produto.id}>
 
-                <img
-                  src={produto.imagem}
-                  alt={produto.nome}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
+            {produtosFiltrados.map((produto) => {
 
-                <div className="produto-info">
-                  <span className="categoria">
-                    {categorias.find(
-                      (c) => c.id === produto.categoriaId
-                    )?.nome ?? "Sem categoria"}
-                  </span>
+              // Verifica se o produto está indisponível
+              const indisponivel =
+                Number(produto.estoque) <= 0;
 
-                  <h2>{produto.nome}</h2>
+              return (
+                <article
+                  key={produto.id}
+                  className={`produto ${
+                    indisponivel
+                      ? "produto-indisponivel"
+                      : ""
+                  }`}
+                >
 
-                  <p>{produto.descricao}</p>
+                  {/* Imagem do produto */}
+                  <div className="produto-imagem-container">
 
-                  <div className="produto-footer">
-                    <strong>
-                      R${" "}
-                      {Number(produto.preco)
-                        .toFixed(2)
-                        .replace(".", ",")}
-                    </strong>
+                    <img
+                      src={produto.imagem}
+                      alt={produto.nome}
+                      className="w-full h-48 object-cover rounded-t-lg"
+                    />
 
-                    <button
-                      onClick={() =>
-                        handleAdicionarAoCarrinho(produto)
-                      }
-                    >
-                      Adicionar ao Carrinho
-                    </button>
+                    {/* Selo exibido quando o estoque chega a zero */}
+                    {indisponivel && (
+                      <span className="produto-indisponivel-badge">
+                        Indisponível
+                      </span>
+                    )}
+
                   </div>
-                </div>
-              </article>
-            ))}
+
+                  {/* Informações do produto */}
+                  <div className="produto-info">
+
+                    <span className="categoria">
+                      {categorias.find(
+                        (c) =>
+                          c.id === produto.categoriaId
+                      )?.nome ?? "Sem categoria"}
+                    </span>
+
+                    <h2>{produto.nome}</h2>
+
+                    <p>{produto.descricao}</p>
+
+                    <div className="produto-footer">
+
+                      <strong>
+                        R${" "}
+                        {Number(produto.preco)
+                          .toFixed(2)
+                          .replace(".", ",")}
+                      </strong>
+
+                      <button
+                        className={
+                          indisponivel
+                            ? "botao-indisponivel"
+                            : ""
+                        }
+                        disabled={indisponivel}
+                        onClick={() =>
+                          handleAdicionarAoCarrinho(
+                            produto
+                          )
+                        }
+                      >
+                        {indisponivel
+                          ? "Indisponível"
+                          : "Adicionar ao Carrinho"}
+                      </button>
+
+                    </div>
+                  </div>
+
+                </article>
+              );
+            })}
+
           </section>
         )}
       </main>
