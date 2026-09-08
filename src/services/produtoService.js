@@ -18,6 +18,29 @@ export function salvarProdutos(produtos) {
   localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtos));
 }
 
+// Baixa do estoque após a confirmação de um pedido
+export function baixarEstoque(itens) {
+  const produtos = listarProdutos();
+
+  itens.forEach((item) => {
+    const index = produtos.findIndex((produto) => produto.id === item.id);
+
+    if (index !== -1) {
+      const quantidadeVendida = Number(item.quantity) || 0;
+
+      produtos[index] = {
+        ...produtos[index],
+        estoque: Math.max(
+          0,
+          Number(produtos[index].estoque) - quantidadeVendida
+        ),
+      };
+    }
+  });
+
+  salvarProdutos(produtos);
+}
+
 // Adiciona um novo produto (Com suporte a Imagem)
 export function adicionarProduto(produto) {
   const produtos = listarProdutos();
